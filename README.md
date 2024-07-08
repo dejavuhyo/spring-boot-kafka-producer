@@ -1,5 +1,3 @@
-# spring-boot-kafka-producer
-
 # Spring Boot 3.2 Kafka Producer
 
 ## 1. 설명
