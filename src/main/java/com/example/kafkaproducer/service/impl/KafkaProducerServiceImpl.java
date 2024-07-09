@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class KafkaProducerServiceImpl implements KafkaProducerService {
 
-    @Value("${topic.name}")
+    @Value("${kafka.topic-name}")
     private String topicName;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
