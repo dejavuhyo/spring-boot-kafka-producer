@@ -2,15 +2,14 @@ package com.example.kafkaproducer.service.impl;
 
 import com.example.kafkaproducer.service.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaProducerServiceImpl implements KafkaProducerService {
 
     @Value("${kafka.topic-name}")
@@ -20,12 +19,11 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
 
     @Override
     public void sendMessage(String message) {
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
-        future.whenComplete((result, ex) -> {
+        kafkaTemplate.send(topicName, message).whenComplete((result, ex) -> {
             if (ex == null) {
-                System.out.println("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                log.info("Message sent to topic: {}", message);
             } else {
-                System.out.println("Unable to send message=[" + message + "] due to : " + ex.getMessage());
+                log.error("Failed to send message", ex);
             }
         });
     }
